@@ -150,7 +150,7 @@ Codex is exposing a debug port, but no `app://` page was found. Open a Codex win
 
 ## Version
 
-Current version: `0.2.3`.
+Current version: `0.2.4`.
 
 ## License
 

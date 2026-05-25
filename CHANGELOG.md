@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.4
+
+- Reset the app body background so the Windows top chrome does not show stale wallpaper imagery.
+- Make the Codex top bars use a consistent glass chrome layer.
+- Write generated CSS without a UTF-8 BOM so `:root` variables apply correctly in Chromium.
+
 ## 0.2.3
 
 - Apply, remove, and report status across every matching Codex CDP page target instead of only the first one.

@@ -48,8 +48,10 @@ $resolvedImagePath = (Resolve-Path -LiteralPath $ImagePath).Path
 $bytes = [System.IO.File]::ReadAllBytes($resolvedImagePath)
 $dataUrl = "data:$mime;base64," + [Convert]::ToBase64String($bytes)
 $template = Get-Content -LiteralPath $templatePath -Raw
+$template = $template.TrimStart([char]0xFEFF)
 $css = $template.Replace("__IMAGE_DATA_URL__", $dataUrl)
-Set-Content -LiteralPath $OutCss -Value $css -Encoding UTF8
+$utf8NoBom = [System.Text.UTF8Encoding]::new($false)
+[System.IO.File]::WriteAllText($OutCss, $css, $utf8NoBom)
 
 node $injectorPath --host $HostName --port $Port --css $OutCss
 Write-Host "Generated CSS: $OutCss"

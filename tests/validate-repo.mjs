@@ -7,6 +7,7 @@ const readme = readText('README.md');
 const skill = readText('skills/codex-wallpaper/SKILL.md');
 const startScript = readText('scripts/start-codex-debug.ps1');
 const injector = readText('scripts/inject-css.mjs');
+const applyScript = readText('scripts/apply-codex-wallpaper.ps1');
 
 assert.match(
   readme,
@@ -51,4 +52,16 @@ assert.match(
   injector,
   /for \(const target of pageTargets\)/,
   'inject-css.mjs should apply actions to every selected page target.',
+);
+
+assert.match(
+  applyScript,
+  /UTF8Encoding\]::new\(\$false\)/,
+  'apply-codex-wallpaper.ps1 should write generated CSS without a UTF-8 BOM.',
+);
+
+assert.doesNotMatch(
+  applyScript,
+  /Set-Content[\s\S]+-Encoding UTF8/,
+  'apply-codex-wallpaper.ps1 should not use Windows PowerShell UTF8 output because it writes a BOM.',
 );

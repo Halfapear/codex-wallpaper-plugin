@@ -5,8 +5,14 @@
   --codex-wallpaper-panel: rgba(255, 253, 246, 0.74);
   --codex-wallpaper-panel-soft: rgba(255, 253, 246, 0.36);
   --codex-wallpaper-readable: rgba(255, 253, 246, 0.68);
+  --codex-wallpaper-chrome: rgba(248, 245, 234, 0.90);
   --codex-wallpaper-line: rgba(27, 40, 24, 0.13);
   --codex-wallpaper-shadow: rgba(18, 25, 15, 0.16);
+}
+
+html[data-codex-window-type="electron"] body {
+  background-color: #f5f1e6 !important;
+  background-image: none !important;
 }
 
 html[data-codex-window-type="electron"] body .main-surface.main-surface {
@@ -51,17 +57,18 @@ html[data-codex-window-type="electron"] main.main-surface [class*="max-w-(--thre
 }
 
 html[data-codex-window-type="electron"] main.main-surface header.app-header-tint {
-  background:
-    linear-gradient(90deg, rgba(255, 253, 246, 0.20), rgba(255, 253, 246, 0.10) 68%, rgba(255, 253, 246, 0.03)) !important;
-  border-bottom-color: transparent !important;
-  box-shadow: none !important;
+  background: var(--codex-wallpaper-chrome) !important;
+  border-bottom-color: rgba(27, 40, 24, 0.10) !important;
+  backdrop-filter: blur(14px) saturate(1.02) !important;
+  box-shadow: 0 8px 22px rgba(23, 28, 18, 0.07) !important;
 }
 
 html[data-codex-window-type="electron"] .app-header-tint[class*="windows-top-bar"] {
-  background:
-    linear-gradient(90deg, rgba(255, 253, 246, 0.32), rgba(255, 253, 246, 0.16) 42%, rgba(255, 253, 246, 0.06) 78%, transparent) !important;
-  backdrop-filter: blur(5px) saturate(1.02);
-  box-shadow: none !important;
+  background: var(--codex-wallpaper-chrome) !important;
+  backdrop-filter: blur(14px) saturate(1.02) !important;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.48) inset,
+    0 8px 22px rgba(23, 28, 18, 0.07) !important;
 }
 
 html[data-codex-window-type="electron"] nav[role="navigation"] {
