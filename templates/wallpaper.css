@@ -1,17 +1,21 @@
-/* Generated from templates/wallpaper.css. __IMAGE_DATA_URL__ is replaced by the helper script. */
+/* Generated from templates/wallpaper.css by the helper script. */
 :root {
-  --codex-wallpaper-image: url("__IMAGE_DATA_URL__");
-  --codex-wallpaper-ink: #070d07;
-  --codex-wallpaper-muted: #26311f;
+  --codex-wallpaper-ink: #071007;
+  --codex-wallpaper-muted: #2a3425;
+  --codex-wallpaper-panel: rgba(255, 253, 246, 0.74);
+  --codex-wallpaper-panel-soft: rgba(255, 253, 246, 0.36);
+  --codex-wallpaper-line: rgba(27, 40, 24, 0.13);
+  --codex-wallpaper-shadow: rgba(18, 25, 15, 0.16);
 }
 
-html[data-codex-window-type="electron"] .main-surface {
+html[data-codex-window-type="electron"] body .main-surface.main-surface {
   color: var(--codex-wallpaper-ink) !important;
-  background:
-    linear-gradient(180deg, rgba(255, 254, 249, 0.16), rgba(255, 254, 249, 0.10) 18%, rgba(255, 253, 245, 0.06) 58%, rgba(255, 253, 245, 0.22)),
-    var(--codex-wallpaper-image) !important;
+  background-color: transparent !important;
+  background-image:
+    radial-gradient(circle at 50% 32%, rgba(255, 253, 246, 0.16), rgba(255, 253, 246, 0.05) 34%, rgba(8, 16, 7, 0.16) 100%),
+    url("__IMAGE_DATA_URL__") !important;
   background-size: cover, cover !important;
-  background-position: center center, center center !important;
+  background-position: center top, center top !important;
   background-repeat: no-repeat, no-repeat !important;
 }
 
@@ -19,38 +23,41 @@ html[data-codex-window-type="electron"] main.main-surface :is(
   [class*="app-shell-main-content-frame"],
   [class*="app-shell-main-content-viewport"]
 ) {
-  background:
-    linear-gradient(90deg, rgba(255, 254, 249, 0.30), rgba(255, 254, 249, 0.23) 64%, rgba(255, 254, 249, 0.14)) !important;
-  backdrop-filter: blur(7px) saturate(1.04);
+  background: transparent !important;
+  backdrop-filter: none !important;
   border-top: 0 !important;
 }
 
 html[data-codex-window-type="electron"] main.main-surface [class*="thread-scroll-container"] {
-  background:
-    linear-gradient(90deg, rgba(255, 254, 249, 0.28), rgba(255, 254, 249, 0.20) 62%, rgba(255, 254, 249, 0.12)) !important;
-  backdrop-filter: blur(8px) saturate(1.05);
+  background: transparent !important;
+  backdrop-filter: none !important;
+}
+
+html[data-codex-window-type="electron"] main.main-surface [class*="min-h-full"][class*="justify-start"] {
+  background: transparent !important;
 }
 
 html[data-codex-window-type="electron"] main.main-surface header.app-header-tint {
   background:
-    linear-gradient(90deg, rgba(255, 254, 250, 0.78), rgba(255, 254, 250, 0.66) 68%, rgba(255, 254, 250, 0.46)) !important;
-  border-bottom-color: rgba(31, 42, 28, 0.07) !important;
-  box-shadow: 0 8px 20px rgba(31, 42, 28, 0.05) !important;
+    linear-gradient(90deg, rgba(255, 253, 246, 0.20), rgba(255, 253, 246, 0.10) 68%, rgba(255, 253, 246, 0.03)) !important;
+  border-bottom-color: transparent !important;
+  box-shadow: none !important;
 }
 
 html[data-codex-window-type="electron"] .app-header-tint[class*="windows-top-bar"] {
   background:
-    linear-gradient(90deg, rgba(255, 254, 250, 0.50), rgba(255, 254, 250, 0.26) 38%, rgba(255, 254, 250, 0.12) 72%, rgba(255, 254, 250, 0.04)) !important;
-  backdrop-filter: blur(10px) saturate(1.02);
+    linear-gradient(90deg, rgba(255, 253, 246, 0.32), rgba(255, 253, 246, 0.16) 42%, rgba(255, 253, 246, 0.06) 78%, transparent) !important;
+  backdrop-filter: blur(5px) saturate(1.02);
+  box-shadow: none !important;
 }
 
 html[data-codex-window-type="electron"] nav[role="navigation"] {
   background:
-    linear-gradient(90deg, rgba(10, 18, 12, 0.68), rgba(28, 41, 24, 0.48) 72%, rgba(255, 254, 249, 0.08)) !important;
-  backdrop-filter: blur(16px) saturate(1.04);
+    linear-gradient(90deg, rgba(7, 14, 8, 0.72), rgba(17, 29, 16, 0.58) 68%, rgba(255, 253, 246, 0.14)) !important;
+  backdrop-filter: blur(12px) saturate(1.05);
   box-shadow:
-    inset -1px 0 0 rgba(255, 255, 255, 0.07),
-    18px 0 40px rgba(255, 254, 249, 0.10) !important;
+    inset -1px 0 0 rgba(255, 255, 255, 0.05),
+    18px 0 42px rgba(15, 22, 12, 0.16) !important;
 }
 
 html[data-codex-window-type="electron"] .sidebar-resize-handle-line {
@@ -110,10 +117,25 @@ html[data-codex-window-type="electron"] main.main-surface [class*="sticky bottom
 }
 
 html[data-codex-window-type="electron"] main.main-surface [class*="sticky bottom-0"] [class*="bg-token-input-background"] {
-  background-color: rgba(255, 254, 250, 0.92) !important;
-  border-color: rgba(31, 42, 28, 0.16) !important;
-  backdrop-filter: blur(12px) saturate(1.04) !important;
+  background-color: var(--codex-wallpaper-panel) !important;
+  border-color: var(--codex-wallpaper-line) !important;
+  backdrop-filter: blur(14px) saturate(1.08) !important;
   box-shadow:
-    0 12px 28px rgba(36, 44, 28, 0.13),
-    inset 0 1px 0 rgba(255, 255, 255, 0.80) !important;
+    0 14px 34px var(--codex-wallpaper-shadow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.76) !important;
+}
+
+html[data-codex-window-type="electron"] main.main-surface [class*="bg-token-main-surface-secondary"] {
+  background-color: rgba(12, 17, 12, 0.78) !important;
+  border-color: rgba(255, 255, 255, 0.10) !important;
+  box-shadow: 0 12px 28px rgba(9, 13, 8, 0.18) !important;
+}
+
+html[data-codex-window-type="electron"] main.main-surface [class*="bg-token-main-surface-secondary"],
+html[data-codex-window-type="electron"] main.main-surface [class*="bg-token-main-surface-secondary"] :is(p, span, div, strong, small) {
+  color: #f7f4e8 !important;
+}
+
+html[data-codex-window-type="electron"] main.main-surface [class*="bg-token-main-surface-secondary"] [class*="text-token-text-secondary"] {
+  color: rgba(247, 244, 232, 0.72) !important;
 }

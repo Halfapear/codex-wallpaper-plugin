@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2.2
+
+- Make the wallpaper image apply directly to the main surface instead of relying on a large CSS custom property.
+- Remove Codex's thread washout gradient so image backgrounds remain visible.
+- Tune the default overlay, sidebar, top bar, composer, and dark card contrast.
+- Add `check-wallpaper-css.mjs` to catch washed-out wallpaper regressions.
+
 ## 0.2.1
 
 - Explain how this wallpaper plugin relates to DexThemes and community plugin lists.

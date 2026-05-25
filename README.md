@@ -72,6 +72,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\restore-codex-wall
 | `scripts/status-codex-wallpaper.ps1` | Reports whether the wallpaper style is currently injected. |
 | `scripts/restore-codex-wallpaper.ps1` | Removes this plugin's injected style element. |
 | `scripts/inject-css.mjs` | Minimal CDP injector used by the PowerShell scripts. |
+| `scripts/check-wallpaper-css.mjs` | Repository check for washed-out wallpaper CSS regressions. |
 
 ## Validation
 
@@ -149,7 +150,7 @@ Codex is exposing a debug port, but no `app://` page was found. Open a Codex win
 
 ## Version
 
-Current version: `0.2.1`.
+Current version: `0.2.2`.
 
 ## License
 
