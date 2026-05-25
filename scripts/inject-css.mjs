@@ -155,6 +155,29 @@ class CdpClient {
   }
 }
 
+function selectPageTargets(targets, targetPrefix) {
+  const matchingPages = targets.filter((item) => item.type === 'page' && String(item.url).startsWith(targetPrefix));
+  if (matchingPages.length) return matchingPages;
+  return targets.filter((item) => item.type === 'page');
+}
+
+async function evaluateOnTarget(target, opts, expression) {
+  const client = new CdpClient(target.webSocketDebuggerUrl, opts.timeoutMs);
+  await client.connect();
+  try {
+    await client.send('Runtime.enable');
+    await client.send('Page.enable');
+    const result = await client.send('Runtime.evaluate', {
+      expression,
+      awaitPromise: false,
+      returnByValue: true,
+    });
+    return result.result.value;
+  } finally {
+    client.close();
+  }
+}
+
 async function main() {
   if (typeof WebSocket === 'undefined') {
     throw new Error('Node.js 22+ with built-in WebSocket support is required.');
@@ -164,23 +187,14 @@ async function main() {
   const css = opts.css ? fs.readFileSync(opts.css, 'utf8') : '';
   const targets = await fetchJson(`http://${opts.host}:${opts.port}/json/list`, opts.timeoutMs);
 
-  const target =
-    targets.find((item) => item.type === 'page' && String(item.url).startsWith(opts.targetPrefix)) ||
-    targets.find((item) => item.type === 'page');
+  const pageTargets = selectPageTargets(targets, opts.targetPrefix).filter((target) => target.webSocketDebuggerUrl);
 
-  if (!target?.webSocketDebuggerUrl) {
+  if (!pageTargets.length) {
     throw new Error(`No CDP page target found on ${opts.host}:${opts.port}`);
   }
 
-  const client = new CdpClient(target.webSocketDebuggerUrl, opts.timeoutMs);
-  await client.connect();
-  try {
-    await client.send('Runtime.enable');
-    await client.send('Page.enable');
-
-    if (opts.status) {
-      const result = await client.send('Runtime.evaluate', {
-        expression: `
+  if (opts.status) {
+    const expression = `
           (() => {
             const style = document.getElementById('codex-wallpaper-plugin-style');
             return {
@@ -190,22 +204,36 @@ async function main() {
               marker: document.documentElement.dataset.codexWallpaperPlugin || null
             };
           })()
-        `,
-        returnByValue: true,
-      });
-      console.log(JSON.stringify(result.result.value, null, 2));
-      return;
+        `;
+    const results = [];
+    for (const target of pageTargets) {
+      results.push(await evaluateOnTarget(target, opts, expression));
     }
+    const activeCount = results.filter((result) => result.active).length;
+    console.log(
+      JSON.stringify(
+        {
+          active: activeCount > 0 && activeCount === results.length,
+          activeCount,
+          targetCount: results.length,
+          targets: results,
+        },
+        null,
+        2,
+      ),
+    );
+    return;
+  }
 
-    const expression = opts.removeStyle
-      ? `
+  const expression = opts.removeStyle
+    ? `
           (() => {
             document.getElementById('codex-wallpaper-plugin-style')?.remove();
             delete document.documentElement.dataset.codexWallpaperPlugin;
             return { removed: true, target: location.href };
           })()
         `
-      : `
+    : `
           (() => {
             const id = 'codex-wallpaper-plugin-style';
             let style = document.getElementById(id);
@@ -220,15 +248,21 @@ async function main() {
           })()
         `;
 
-    const result = await client.send('Runtime.evaluate', {
-      expression,
-      awaitPromise: false,
-      returnByValue: true,
-    });
-    console.log(JSON.stringify(result.result.value, null, 2));
-  } finally {
-    client.close();
+  const results = [];
+  for (const target of pageTargets) {
+    results.push(await evaluateOnTarget(target, opts, expression));
   }
+  console.log(
+    JSON.stringify(
+      {
+        [opts.removeStyle ? 'removed' : 'injected']: true,
+        targetCount: results.length,
+        targets: results,
+      },
+      null,
+      2,
+    ),
+  );
 }
 
 main().catch((error) => {

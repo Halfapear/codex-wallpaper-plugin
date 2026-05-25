@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.3
+
+- Apply, remove, and report status across every matching Codex CDP page target instead of only the first one.
+- Add a readable glass layer behind the thread content so text does not sit directly on busy wallpaper art.
+- Extend repository checks for multi-target injection and readable content panels.
+
 ## 0.2.2
 
 - Make the wallpaper image apply directly to the main surface instead of relying on a large CSS custom property.

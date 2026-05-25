@@ -6,6 +6,7 @@ const readText = (path) => readFileSync(path, 'utf8');
 const readme = readText('README.md');
 const skill = readText('skills/codex-wallpaper/SKILL.md');
 const startScript = readText('scripts/start-codex-debug.ps1');
+const injector = readText('scripts/inject-css.mjs');
 
 assert.match(
   readme,
@@ -38,4 +39,16 @@ assert.match(
   startScript,
   /Codex is already running without CDP\. Quit Codex, then rerun this script\. This script will not kill your app\./,
   'start-codex-debug.ps1 should fail clearly instead of starting another instance when Codex is already running without CDP.',
+);
+
+assert.match(
+  injector,
+  /function selectPageTargets/,
+  'inject-css.mjs should select all matching app page targets.',
+);
+
+assert.match(
+  injector,
+  /for \(const target of pageTargets\)/,
+  'inject-css.mjs should apply actions to every selected page target.',
 );
