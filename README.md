@@ -1,85 +1,143 @@
 # Codex Wallpaper Plugin
 
-Use a local JPG, PNG, or WebP image as the background wallpaper for Codex Desktop on Windows.
+Local image wallpaper for Codex Desktop on Windows.
 
-This is a first public version of a small Codex plugin plus helper scripts. It uses Chrome DevTools Protocol (CDP) to inject CSS into a running Codex Desktop window. It does not patch `app.asar`, does not modify the installed app package, and does not upload your image anywhere.
+This plugin applies a JPG, PNG, or WebP image as the Codex Desktop chat background and keeps the interface readable with blurred glass surfaces. It is intentionally small: no npm install, no app bundle patching, no uploaded images.
 
-## Features
+## Why
 
-- Applies a local image as the Codex Desktop background.
-- Adds blurred glass layers so chat text stays readable.
-- Keeps the bottom composer visible without a full-width white tray.
-- Styles the sidebar, top bar, right output cards, and main chat surface as one coherent wallpaper theme.
-- Includes a Codex plugin manifest and skill instructions.
-- Includes a restore script for removing the injected wallpaper layer.
+Codex has theme controls, but image backgrounds need extra work: the chat surface, sidebar, top bar, output panel, and composer all need different opacity and blur rules. This plugin packages those rules with scripts that are easy to run and easy to undo.
+
+## What You Get
+
+- Local JPG, PNG, JPEG, and WebP wallpaper support.
+- Blurred main chat glass that does not wash the image out.
+- Dark readable chat text.
+- Sidebar and top bar styling that matches the wallpaper.
+- Composer styling without a full-width white tray behind it.
+- `status`, `apply`, `restore`, and `start Codex with CDP` scripts.
+- A Codex plugin manifest and a `codex-wallpaper` skill.
 
 ## Requirements
 
 - Windows.
 - Codex Desktop.
-- Node.js 18 or newer.
 - PowerShell.
-- Codex Desktop must be running with a local CDP port, for example `9444`.
+- Node.js 22 or newer.
 
 ## Quick Start
 
-Start Codex Desktop with remote debugging enabled. The exact path can vary by installation, but the launch arguments should look like this:
+Clone the repo:
 
 ```powershell
-Codex.exe --remote-debugging-address=127.0.0.1 --remote-debugging-port=9444
+git clone https://github.com/Halfapear/codex-wallpaper-plugin.git
+cd codex-wallpaper-plugin
 ```
 
-Then apply a wallpaper:
+Start Codex Desktop with a local debug port:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\start-codex-debug.ps1 -Port 9444
+```
+
+This script does not close or restart Codex. If Codex is already open without CDP, quit Codex yourself and run the script again.
+
+Apply a wallpaper:
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\apply-codex-wallpaper.ps1 -ImagePath "D:\Pictures\wallpaper.jpg" -Port 9444
 ```
 
-Restore the default injected style:
+Check status:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\status-codex-wallpaper.ps1 -Port 9444
+```
+
+Remove the injected wallpaper style:
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\restore-codex-wallpaper.ps1 -Port 9444
 ```
 
-## Codex Plugin
+## Scripts
 
-The plugin manifest is in `.codex-plugin/plugin.json`, and the skill is in `skills/codex-wallpaper/SKILL.md`.
-
-The skill tells Codex how to:
-
-- Ask for a local image path.
-- Apply the wallpaper through `scripts/apply-codex-wallpaper.ps1`.
-- Inspect and tune readability.
-- Restore the neutral style.
+| Script | Purpose |
+| --- | --- |
+| `scripts/start-codex-debug.ps1` | Starts Codex Desktop with `--remote-debugging-port`. |
+| `scripts/apply-codex-wallpaper.ps1` | Converts a local image to generated CSS and injects it. |
+| `scripts/status-codex-wallpaper.ps1` | Reports whether the wallpaper style is currently injected. |
+| `scripts/restore-codex-wallpaper.ps1` | Removes this plugin's injected style element. |
+| `scripts/inject-css.mjs` | Minimal CDP injector used by the PowerShell scripts. |
 
 ## How It Works
 
-1. `apply-codex-wallpaper.ps1` reads your local image.
-2. It converts the image to a local CSS data URL.
+1. `apply-codex-wallpaper.ps1` validates Node.js, the image path, and the Codex CDP port.
+2. It reads the local image and embeds it as a CSS data URL.
 3. It writes `.generated/codex-wallpaper.generated.css`.
-4. `inject-css.mjs` connects to the Codex Desktop CDP endpoint.
-5. It injects the generated CSS into the active `app://` page.
+4. `inject-css.mjs` connects to the running Codex Desktop `app://` page.
+5. It creates or updates a single style element: `#codex-wallpaper-plugin-style`.
+6. `restore-codex-wallpaper.ps1` removes that style element.
 
 The generated CSS is ignored by Git because it contains your private image data.
 
+## Codex Plugin Layout
+
+```text
+.codex-plugin/plugin.json
+skills/codex-wallpaper/SKILL.md
+scripts/
+templates/wallpaper.css
+```
+
+The skill teaches Codex how to apply, tune, inspect, and restore the wallpaper.
+
 ## Privacy
 
-This plugin does not send your image to any service. The image is read locally and embedded into a generated local CSS file. Do not commit `.generated/` or generated CSS files if they contain private images.
+Images stay local. The script reads your image and writes a generated CSS file under `.generated/`. Nothing is uploaded by this plugin.
+
+Do not commit `.generated/` or generated CSS files if they contain private images.
+
+## Troubleshooting
+
+`Codex CDP is not reachable`
+
+Run:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\start-codex-debug.ps1 -Port 9444
+```
+
+If Codex was already open before running the script, quit Codex yourself and run the script again. The script will not kill your running app.
+
+`WebSocket is not defined`
+
+Install Node.js 22 or newer. The injector uses the built-in WebSocket client.
+
+`Unsupported image type`
+
+Use `.jpg`, `.jpeg`, `.png`, or `.webp`.
+
+`No CDP page target found`
+
+Codex is exposing a debug port, but no `app://` page was found. Open a Codex window and retry.
 
 ## Known Limits
 
-- This is Windows-first and tested against Codex Desktop with a CDP debug port.
-- If Codex Desktop is not launched with remote debugging, the scripts cannot connect.
-- Codex Desktop DOM class names may change between app versions. If that happens, the CSS selectors may need an update.
-- The restore script only removes this plugin's injected style layer; it does not undo unrelated theme tools.
+- Windows-first.
+- Requires Codex Desktop to expose a local CDP port.
+- Codex Desktop DOM class names can change between releases.
+- This removes only its own injected style layer; it does not undo unrelated theme tools.
 
 ## Related Work
 
-- [`jstxn/codex-themes`](https://github.com/jstxn/codex-themes) is a broader Codex Desktop theme injection project. This repository focuses specifically on local image wallpaper and readability tuning.
+- [DexThemes](https://www.dexthemes.com/) is a community Codex theme gallery and builder for color themes.
+- [`jstxn/codex-themes`](https://github.com/jstxn/codex-themes) is a broader Codex Desktop theme injection project.
+- [`awesome-codex-plugins`](https://github.com/hashgraph-online/awesome-codex-plugins) tracks community Codex plugins and resources.
 
 ## Version
 
-`0.1.0` is the first public version.
+Current version: `0.2.0`.
 
 ## License
 

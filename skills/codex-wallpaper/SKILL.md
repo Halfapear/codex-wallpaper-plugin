@@ -11,8 +11,9 @@ Use this skill when the user wants a local image as the Codex Desktop background
 
 1. Confirm the target is Codex Desktop on Windows.
 2. Ask for an absolute image path if the user has not provided one.
-3. Run `scripts/apply-codex-wallpaper.ps1` from the plugin root.
-4. Verify with a screenshot or direct DOM/CSS inspection before claiming success.
+3. Ensure Codex Desktop exposes a CDP port. If not, run `scripts/start-codex-debug.ps1`.
+4. Run `scripts/apply-codex-wallpaper.ps1` from the plugin root.
+5. Run `scripts/status-codex-wallpaper.ps1` or verify with a screenshot before claiming success.
 
 ## Commands
 
@@ -22,13 +23,25 @@ Apply a wallpaper to an already running Codex Desktop instance that exposes CDP:
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\apply-codex-wallpaper.ps1 -ImagePath "D:\Pictures\wallpaper.jpg"
 ```
 
+Start Codex with CDP:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\start-codex-debug.ps1 -Port 9444
+```
+
 Use a custom debug port:
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\apply-codex-wallpaper.ps1 -ImagePath "D:\Pictures\wallpaper.jpg" -Port 9444
 ```
 
-Restore by injecting the bundled neutral CSS:
+Check status:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\status-codex-wallpaper.ps1 -Port 9444
+```
+
+Restore by removing the injected style element:
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\restore-codex-wallpaper.ps1 -Port 9444
@@ -37,7 +50,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\restore-codex-wall
 ## Safety Notes
 
 - This plugin does not patch `app.asar`.
-- It injects CSS into a running Codex Desktop page through Chrome DevTools Protocol.
+- It injects one style element into a running Codex Desktop page through Chrome DevTools Protocol.
 - It embeds the selected image into a generated local CSS file as a data URL.
 - Do not publish generated CSS files if they contain a private image.
-- If Codex is not launched with remote debugging, start it with a local CDP port before applying.
+- If Codex is not launched with remote debugging, run `scripts/start-codex-debug.ps1` before applying.
