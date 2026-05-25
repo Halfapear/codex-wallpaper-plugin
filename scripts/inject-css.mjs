@@ -189,7 +189,7 @@ async function main() {
               cssBytes: style ? style.textContent.length : 0,
               marker: document.documentElement.dataset.codexWallpaperPlugin || null
             };
-          }
+          })()
         `,
         returnByValue: true,
       });
