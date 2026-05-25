@@ -1,0 +1,17 @@
+/* Neutral restore layer. Inject this to remove the wallpaper customizations from this plugin. */
+:root {
+  --codex-wallpaper-image: none;
+}
+
+html[data-codex-window-type="electron"] .main-surface,
+html[data-codex-window-type="electron"] main.main-surface,
+html[data-codex-window-type="electron"] nav[role="navigation"],
+html[data-codex-window-type="electron"] main.main-surface header.app-header-tint,
+html[data-codex-window-type="electron"] main.main-surface [class*="thread-scroll-container"],
+html[data-codex-window-type="electron"] main.main-surface [class*="sticky bottom-0"] {
+  background: revert !important;
+  background-color: revert !important;
+  background-image: revert !important;
+  backdrop-filter: revert !important;
+  box-shadow: revert !important;
+}

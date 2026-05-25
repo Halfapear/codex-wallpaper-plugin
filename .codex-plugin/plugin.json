@@ -1,0 +1,41 @@
+{
+  "name": "codex-wallpaper-plugin",
+  "version": "0.1.0",
+  "description": "Apply a local JPG or PNG wallpaper to Codex Desktop with readable glass-style chat surfaces.",
+  "author": {
+    "name": "Halfapear",
+    "email": "1783148122@qq.com",
+    "url": "https://github.com/Halfapear"
+  },
+  "homepage": "https://github.com/Halfapear/codex-wallpaper-plugin",
+  "repository": "https://github.com/Halfapear/codex-wallpaper-plugin",
+  "license": "MIT",
+  "keywords": [
+    "codex",
+    "desktop",
+    "wallpaper",
+    "theme",
+    "windows"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Codex Wallpaper Plugin",
+    "shortDescription": "Use local images as Codex Desktop wallpaper.",
+    "longDescription": "A Windows-focused Codex plugin and helper scripts for applying a local JPG or PNG as the Codex Desktop chat background through Chrome DevTools Protocol CSS injection. It keeps text readable with blurred glass surfaces and avoids modifying app.asar.",
+    "developerName": "Halfapear",
+    "category": "Productivity",
+    "capabilities": [
+      "Write",
+      "Interactive"
+    ],
+    "websiteURL": "https://github.com/Halfapear/codex-wallpaper-plugin",
+    "privacyPolicyURL": "https://github.com/Halfapear/codex-wallpaper-plugin/blob/main/README.md#privacy",
+    "termsOfServiceURL": "https://github.com/Halfapear/codex-wallpaper-plugin/blob/main/LICENSE",
+    "defaultPrompt": [
+      "Apply a local wallpaper to Codex Desktop.",
+      "Make my Codex wallpaper more readable.",
+      "Restore the default Codex wallpaper style."
+    ],
+    "brandColor": "#6B7F4B"
+  }
+}
