@@ -30,8 +30,8 @@ $runningMain = Get-CimInstance Win32_Process -ErrorAction SilentlyContinue |
   } |
   Select-Object -First 1
 
-if ($runningMain -and (Test-Path -LiteralPath $runningMain.ExecutablePath)) {
-  $codexExe = $runningMain.ExecutablePath
+if ($runningMain) {
+  throw "Codex is already running without CDP. Quit Codex, then rerun this script. This script will not kill your app."
 }
 
 if (-not $codexExe) {

@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2.1
+
+- Explain how this wallpaper plugin relates to DexThemes and community plugin lists.
+- Replace machine-specific example wallpaper paths with `$env:USERPROFILE` examples.
+- Make `start-codex-debug.ps1` stop early with a clear message when Codex is already running without CDP.
+- Add a lightweight repository validation script for docs and startup behavior.
+
 ## 0.2.0
 
 - Add `start-codex-debug.ps1` for easier setup.

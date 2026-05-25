@@ -20,7 +20,8 @@ Use this skill when the user wants a local image as the Codex Desktop background
 Apply a wallpaper to an already running Codex Desktop instance that exposes CDP:
 
 ```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\apply-codex-wallpaper.ps1 -ImagePath "D:\Pictures\wallpaper.jpg"
+$wallpaper = Join-Path $env:USERPROFILE "Pictures\wallpaper.jpg"
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\apply-codex-wallpaper.ps1 -ImagePath $wallpaper
 ```
 
 Start Codex with CDP:
@@ -32,7 +33,8 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\start-codex-debug.
 Use a custom debug port:
 
 ```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\apply-codex-wallpaper.ps1 -ImagePath "D:\Pictures\wallpaper.jpg" -Port 9444
+$wallpaper = Join-Path $env:USERPROFILE "Pictures\wallpaper.jpg"
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\apply-codex-wallpaper.ps1 -ImagePath $wallpaper -Port 9444
 ```
 
 Check status:
@@ -53,4 +55,4 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\restore-codex-wall
 - It injects one style element into a running Codex Desktop page through Chrome DevTools Protocol.
 - It embeds the selected image into a generated local CSS file as a data URL.
 - Do not publish generated CSS files if they contain a private image.
-- If Codex is not launched with remote debugging, run `scripts/start-codex-debug.ps1` before applying.
+- If Codex is already running without remote debugging, ask the user to quit Codex before running `scripts/start-codex-debug.ps1`; the script will not kill the app.

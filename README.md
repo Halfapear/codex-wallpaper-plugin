@@ -6,7 +6,9 @@ This plugin applies a JPG, PNG, or WebP image as the Codex Desktop chat backgrou
 
 ## Why
 
-Codex has theme controls, but image backgrounds need extra work: the chat surface, sidebar, top bar, output panel, and composer all need different opacity and blur rules. This plugin packages those rules with scripts that are easy to run and easy to undo.
+DexThemes is a Codex theme gallery and builder for choosing and sharing color themes. awesome-codex-plugins is a community list for discovering Codex extensions and related resources.
+
+This project is narrower: it is a wallpaper plugin for local images. Codex theme controls can change colors, but image backgrounds need extra work because the chat surface, sidebar, top bar, output panel, and composer all need different opacity and blur rules. This plugin packages those rules with scripts that are easy to run and easy to undo.
 
 ## What You Get
 
@@ -45,7 +47,8 @@ This script does not close or restart Codex. If Codex is already open without CD
 Apply a wallpaper:
 
 ```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\apply-codex-wallpaper.ps1 -ImagePath "D:\Pictures\wallpaper.jpg" -Port 9444
+$wallpaper = Join-Path $env:USERPROFILE "Pictures\wallpaper.jpg"
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\apply-codex-wallpaper.ps1 -ImagePath $wallpaper -Port 9444
 ```
 
 Check status:
@@ -64,11 +67,20 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\restore-codex-wall
 
 | Script | Purpose |
 | --- | --- |
-| `scripts/start-codex-debug.ps1` | Starts Codex Desktop with `--remote-debugging-port`. |
+| `scripts/start-codex-debug.ps1` | Starts Codex Desktop with `--remote-debugging-port` if Codex is not already running. |
 | `scripts/apply-codex-wallpaper.ps1` | Converts a local image to generated CSS and injects it. |
 | `scripts/status-codex-wallpaper.ps1` | Reports whether the wallpaper style is currently injected. |
 | `scripts/restore-codex-wallpaper.ps1` | Removes this plugin's injected style element. |
 | `scripts/inject-css.mjs` | Minimal CDP injector used by the PowerShell scripts. |
+
+## Validation
+
+Run the repository checks:
+
+```powershell
+node .\tests\validate-repo.mjs
+python <path-to-codex>\skills\.system\plugin-creator\scripts\validate_plugin.py .
+```
 
 ## How It Works
 
@@ -131,13 +143,13 @@ Codex is exposing a debug port, but no `app://` page was found. Open a Codex win
 
 ## Related Work
 
-- [DexThemes](https://www.dexthemes.com/) is a community Codex theme gallery and builder for color themes.
+- [DexThemes](https://www.dexthemes.com/) is a Codex theme gallery and builder for color themes.
 - [`jstxn/codex-themes`](https://github.com/jstxn/codex-themes) is a broader Codex Desktop theme injection project.
-- [`awesome-codex-plugins`](https://github.com/hashgraph-online/awesome-codex-plugins) tracks community Codex plugins and resources.
+- [`awesome-codex-plugins`](https://github.com/hashgraph-online/awesome-codex-plugins) is a community list for Codex plugins and resources.
 
 ## Version
 
-Current version: `0.2.0`.
+Current version: `0.2.1`.
 
 ## License
 
